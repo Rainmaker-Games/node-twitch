@@ -11,11 +11,7 @@
     "test": "jest",
     "build": "tsc",
     "dev": "tsc --watch",
-    "prepublish": "yarn test && yarn build"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Plazide/node-twitch.git"
+    "prepublish": "yarn build"
   },
   "keywords": [
     "twitch",
@@ -28,10 +24,6 @@
   ],
   "author": "Carl Hallén",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Plazide/node-twitch/issues"
-  },
-  "homepage": "https://github.com/Plazide/node-twitch#readme",
   "dependencies": {
     "node-fetch": "^2.6.0"
   },
