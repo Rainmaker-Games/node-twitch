@@ -67,7 +67,7 @@ class TwitchApi extends events_1.EventEmitter {
                 scope: (_a = this.scopes) === null || _a === void 0 ? void 0 : _a.join(" ")
             };
             const endpoint = "https://id.twitch.tv/oauth2/token";
-            const response = yield node_fetch_1.default(endpoint, {
+            const response = yield (0, node_fetch_1.default)(endpoint, {
                 method: "POST",
                 body: JSON.stringify(data),
                 headers: {
@@ -111,7 +111,7 @@ class TwitchApi extends events_1.EventEmitter {
                     "Content-Type": "application/json"
                 }
             };
-            const response = yield node_fetch_1.default(url, options);
+            const response = yield (0, node_fetch_1.default)(url, options);
             const result = yield response.json();
             const accessToken = result.access_token;
             const refreshToken = result.refresh_token;
@@ -141,7 +141,7 @@ class TwitchApi extends events_1.EventEmitter {
                     "Authorization": `OAuth ${this.access_token}`
                 }
             };
-            const response = yield node_fetch_1.default(url, options);
+            const response = yield (0, node_fetch_1.default)(url, options);
             const result = yield response.json();
             const message = result.message;
             const valid = response.status === 200;
@@ -169,7 +169,7 @@ class TwitchApi extends events_1.EventEmitter {
                     "Authorization": `Bearer ${this.access_token}`
                 }
             };
-            const response = yield node_fetch_1.default(url, options);
+            const response = yield (0, node_fetch_1.default)(url, options);
             if (response.status === 401) {
                 yield this._refresh();
                 return this._get(endpoint);
@@ -197,7 +197,7 @@ class TwitchApi extends events_1.EventEmitter {
                 }
             };
             try {
-                const response = yield node_fetch_1.default(url, options);
+                const response = yield (0, node_fetch_1.default)(url, options);
                 if (response.status === 200 || response.status === 202)
                     return response.json();
                 else
@@ -282,7 +282,7 @@ class TwitchApi extends events_1.EventEmitter {
                 `&code=${code}` +
                 "&grant_type=authorization_code" +
                 `&redirect_uri=${this.redirect_uri}`;
-            const response = yield node_fetch_1.default(endpoint, { method: "POST" });
+            const response = yield (0, node_fetch_1.default)(endpoint, { method: "POST" });
             const result = yield response.json();
             if (result.access_token)
                 this.access_token = result.access_token;
@@ -300,7 +300,7 @@ class TwitchApi extends events_1.EventEmitter {
             if (!Array.isArray(games) && typeof games !== "string" && typeof games !== "number")
                 this._error("games must be either a string or number or an array of strings and/or numbers");
             let query = "?";
-            query += util_1.parseMixedParam({ values: games, stringKey: "name", numericKey: "id" });
+            query += (0, util_1.parseMixedParam)({ values: games, stringKey: "name", numericKey: "id" });
             const endpoint = "/games" + query;
             const result = yield this._get(endpoint);
             return result;
@@ -309,7 +309,7 @@ class TwitchApi extends events_1.EventEmitter {
     /** Gets games sorted by number of current viewers on Twitch, most popular first. */
     getTopGames(options) {
         return __awaiter(this, void 0, void 0, function* () {
-            const query = options ? util_1.parseOptions(options) : "";
+            const query = options ? (0, util_1.parseOptions)(options) : "";
             const endpoint = `/games/top?${query}`;
             return this._get(endpoint);
         });
@@ -319,10 +319,10 @@ class TwitchApi extends events_1.EventEmitter {
         return __awaiter(this, void 0, void 0, function* () {
             let query = "?";
             if (Array.isArray(ids)) {
-                query += util_1.parseMixedParam({ values: ids, stringKey: "login", numericKey: "id" });
+                query += (0, util_1.parseMixedParam)({ values: ids, stringKey: "login", numericKey: "id" });
             }
             else {
-                const key = util_1.isNumber("" + ids) ? "id" : "login";
+                const key = (0, util_1.isNumber)("" + ids) ? "id" : "login";
                 query += `${key}=${ids}`;
             }
             const endpoint = "/users" + query;
@@ -334,7 +334,7 @@ class TwitchApi extends events_1.EventEmitter {
         return __awaiter(this, void 0, void 0, function* () {
             let query = "?";
             if (options)
-                query += util_1.parseOptions(options);
+                query += (0, util_1.parseOptions)(options);
             const endpoint = `/users/follows${query}`;
             return this._get(endpoint);
         });
@@ -348,17 +348,17 @@ class TwitchApi extends events_1.EventEmitter {
                 return this._get(endpoint);
             const { channel, channels } = options;
             if (channel) {
-                const key = util_1.isNumber(channel) ? "user_id" : "user_login";
+                const key = (0, util_1.isNumber)(channel) ? "user_id" : "user_login";
                 query += `${key}=${channel}&`;
             }
             if (channels)
-                query += util_1.parseMixedParam({
+                query += (0, util_1.parseMixedParam)({
                     values: channels,
                     stringKey: "user_login",
                     numericKey: "user_id"
                 });
             query += "&";
-            query += util_1.parseOptions(options);
+            query += (0, util_1.parseOptions)(options);
             const response = yield this._get(endpoint + query);
             response.data.map(util_1.addThumbnailMethod);
             return response;
@@ -367,7 +367,7 @@ class TwitchApi extends events_1.EventEmitter {
     /** Gets the list of all stream tags defined by Twitch, optionally filtered by tag ID(s). */
     getAllStreamTags(options) {
         return __awaiter(this, void 0, void 0, function* () {
-            const query = options ? `?${util_1.parseOptions(options)}` : "";
+            const query = options ? `?${(0, util_1.parseOptions)(options)}` : "";
             const endpoint = `/tags/streams${query}`;
             return this._get(endpoint);
         });
@@ -375,7 +375,7 @@ class TwitchApi extends events_1.EventEmitter {
     /** Gets the list of tags for a specified stream (channel). */
     getStreamTags(options) {
         return __awaiter(this, void 0, void 0, function* () {
-            const query = "?" + util_1.parseOptions(options);
+            const query = "?" + (0, util_1.parseOptions)(options);
             const endpoint = `/streams/tags${query}`;
             return this._get(endpoint);
         });
@@ -384,21 +384,21 @@ class TwitchApi extends events_1.EventEmitter {
     getVideos(options) {
         return __awaiter(this, void 0, void 0, function* () {
             let query = "?";
-            query += util_1.parseOptions(options);
+            query += (0, util_1.parseOptions)(options);
             const endpoint = `/videos${query}`;
             return this._get(endpoint);
         });
     }
     getClips(options) {
         return __awaiter(this, void 0, void 0, function* () {
-            const query = "?" + util_1.parseOptions(options);
+            const query = "?" + (0, util_1.parseOptions)(options);
             const endpoint = `/clips${query}`;
             return this._get(endpoint);
         });
     }
     getChannelInformation(options) {
         return __awaiter(this, void 0, void 0, function* () {
-            const query = "?" + util_1.parseOptions(options);
+            const query = "?" + (0, util_1.parseOptions)(options);
             const endpoint = `/channels${query}`;
             return this._get(endpoint);
         });
@@ -407,7 +407,7 @@ class TwitchApi extends events_1.EventEmitter {
     searchChannels(options) {
         return __awaiter(this, void 0, void 0, function* () {
             options.query = encodeURIComponent(options.query);
-            const query = "?" + util_1.parseOptions(options);
+            const query = "?" + (0, util_1.parseOptions)(options);
             const endpoint = `/search/channels${query}`;
             return this._get(endpoint);
         });
@@ -416,7 +416,7 @@ class TwitchApi extends events_1.EventEmitter {
     searchCategories(options) {
         return __awaiter(this, void 0, void 0, function* () {
             options.query = encodeURIComponent(options.query);
-            const query = "?" + util_1.parseOptions(options);
+            const query = "?" + (0, util_1.parseOptions)(options);
             const endpoint = `/search/categories${query}`;
             return this._get(endpoint);
         });
@@ -424,7 +424,7 @@ class TwitchApi extends events_1.EventEmitter {
     /** Get Extension Transactions allows extension back end servers to fetch a list of transactions that have occurred for their extension across all of Twitch. */
     getExtensionTransactions(options) {
         return __awaiter(this, void 0, void 0, function* () {
-            const query = "?" + util_1.parseOptions(options);
+            const query = "?" + (0, util_1.parseOptions)(options);
             const endpoint = `/extensions/transactions${query}`;
             return this._get(endpoint);
         });
@@ -432,7 +432,7 @@ class TwitchApi extends events_1.EventEmitter {
     /** Retrieves the list of available Cheermotes, animated emotes to which viewers can assign Bits, to cheer in chat. Cheermotes returned are available throughout Twitch, in all Bits-enabled channels. */
     getCheermotes(options) {
         return __awaiter(this, void 0, void 0, function* () {
-            const query = options ? `?${util_1.parseOptions(options)}` : "";
+            const query = options ? `?${(0, util_1.parseOptions)(options)}` : "";
             const endpoint = `/bits/cheermotes${query}`;
             return this._get(endpoint);
         });
@@ -452,7 +452,7 @@ class TwitchApi extends events_1.EventEmitter {
         return __awaiter(this, void 0, void 0, function* () {
             if (!this._hasScope("channel:read:stream_key"))
                 this._error("missing scope `channel:read:stream_key`");
-            const query = "?" + util_1.parseOptions(options);
+            const query = "?" + (0, util_1.parseOptions)(options);
             const endpoint = `/streams/key${query}`;
             const result = yield this._get(endpoint);
             return result.data[0].stream_key;
@@ -476,7 +476,7 @@ class TwitchApi extends events_1.EventEmitter {
         return __awaiter(this, void 0, void 0, function* () {
             if (!this._hasScope("bits:read"))
                 this._error("missing scope `bits:read`");
-            const query = options ? `?${util_1.parseOptions(options)}` : "";
+            const query = options ? `?${(0, util_1.parseOptions)(options)}` : "";
             const endpoint = `/bits/leaderboard${query}`;
             return this._get(endpoint);
         });
@@ -486,7 +486,7 @@ class TwitchApi extends events_1.EventEmitter {
         return __awaiter(this, void 0, void 0, function* () {
             if (!this._hasScope("channel:read:subscriptions"))
                 this._error("missing scope `channel:read:subscriptions`");
-            const query = `?${util_1.parseOptions(options)}`;
+            const query = `?${(0, util_1.parseOptions)(options)}`;
             const endpoint = `/subscriptions${query}`;
             return this._get(endpoint);
         });
@@ -496,7 +496,7 @@ class TwitchApi extends events_1.EventEmitter {
         return __awaiter(this, void 0, void 0, function* () {
             if (!this._hasScope("moderation:read"))
                 this._error("missing scope `moderation:read`");
-            const query = "?" + util_1.parseOptions(options);
+            const query = "?" + (0, util_1.parseOptions)(options);
             const endpoint = `/moderation/banned${query}`;
             return this._get(endpoint);
         });
@@ -507,7 +507,7 @@ class TwitchApi extends events_1.EventEmitter {
     createUserFollows(options) {
         return __awaiter(this, void 0, void 0, function* () {
             console.warn("`createUserFollows` is deprecated. Twitch has already removed the related endpoint, and this method will be removed from `node-twitch` in a future version.");
-            const query = "?" + util_1.parseOptions(options);
+            const query = "?" + (0, util_1.parseOptions)(options);
             const endpoint = `/users/follows${query}`;
             return this._post(endpoint);
         });
@@ -518,7 +518,7 @@ class TwitchApi extends events_1.EventEmitter {
     deleteUserFollows(options) {
         return __awaiter(this, void 0, void 0, function* () {
             console.warn("`deleteUserFollows` is deprecated. Twitch has already removed the related endpoint, and this method will be removed from `node-twitch` in a future version.");
-            const query = "?" + util_1.parseOptions(options);
+            const query = "?" + (0, util_1.parseOptions)(options);
             const endpoint = `/users/follows${query}`;
             return this._delete(endpoint);
         });
@@ -530,7 +530,7 @@ class TwitchApi extends events_1.EventEmitter {
         return __awaiter(this, void 0, void 0, function* () {
             if (!this._hasScope("user:read:broadcast"))
                 this._error("missing scope `user:read:broadcast`");
-            const query = "?" + util_1.parseOptions(options);
+            const query = "?" + (0, util_1.parseOptions)(options);
             const endpoint = `/streams/markers${query}`;
             return this._get(endpoint);
         });
@@ -551,7 +551,7 @@ class TwitchApi extends events_1.EventEmitter {
         return __awaiter(this, void 0, void 0, function* () {
             if (!this._hasScope("user:read:broadcast") && !this._hasScope("user:edit:broadcast"))
                 this._error("Missing scope `user:read:broadcast` or `user:edit:broadcast`");
-            const query = options ? "?" + util_1.parseOptions(options) : "";
+            const query = options ? "?" + (0, util_1.parseOptions)(options) : "";
             const endpoint = "/users/extensions" + query;
             return this._get(endpoint);
         });
@@ -561,7 +561,7 @@ class TwitchApi extends events_1.EventEmitter {
         return __awaiter(this, void 0, void 0, function* () {
             if (!this._hasScope("user:edit:broadcast"))
                 this._error("Missing scope `user:edit:broadcast`");
-            const query = "?" + util_1.parseOptions(options);
+            const query = "?" + (0, util_1.parseOptions)(options);
             const endpoint = "/channels" + query;
             return this._patch(endpoint);
         });
@@ -571,7 +571,7 @@ class TwitchApi extends events_1.EventEmitter {
         return __awaiter(this, void 0, void 0, function* () {
             if (!this._hasScope("user:edit"))
                 this._error("Missing scope `user:edit`");
-            const query = options && options.description ? "?" + util_1.parseOptions(options) : "";
+            const query = options && options.description ? "?" + (0, util_1.parseOptions)(options) : "";
             const endpoint = "/users" + query;
             return this._put(endpoint);
         });
@@ -587,7 +587,7 @@ class TwitchApi extends events_1.EventEmitter {
         return __awaiter(this, void 0, void 0, function* () {
             if (!this._hasScope("clips:edit"))
                 this._error("Missing scope `clips:edit`");
-            const query = "?" + util_1.parseOptions(options);
+            const query = "?" + (0, util_1.parseOptions)(options);
             const endpoint = "/clips" + query;
             return this._post(endpoint);
         });
@@ -597,7 +597,7 @@ class TwitchApi extends events_1.EventEmitter {
         return __awaiter(this, void 0, void 0, function* () {
             if (!this._hasScope("moderation:read"))
                 this._error("Missing scope `moderation:read`");
-            const query = "?" + util_1.parseOptions(options);
+            const query = "?" + (0, util_1.parseOptions)(options);
             const endpoint = "/moderation/moderators" + query;
             return this._get(endpoint);
         });
@@ -609,7 +609,7 @@ class TwitchApi extends events_1.EventEmitter {
     This endpoint is only available for developers who have a preexisting arrangement with Twitch. We provide sets of codes to the third party as part of a contract agreement. The third-party program then calls this API to credit the Twitch user by submitting specific code(s). This means that a bits reward can be applied without users having to follow any manual steps. */
     getCodeStatus(options) {
         return __awaiter(this, void 0, void 0, function* () {
-            const query = "?" + util_1.parseOptions(options);
+            const query = "?" + (0, util_1.parseOptions)(options);
             const endpoint = "/entitlements/codes" + query;
             return this._get(endpoint);
         });
@@ -633,7 +633,7 @@ class TwitchApi extends events_1.EventEmitter {
         return __awaiter(this, void 0, void 0, function* () {
             if (!this._hasScope("channel:edit:commercial"))
                 this._error("Missing scope `channel:edit:commercial`");
-            const query = "?" + util_1.parseOptions(options);
+            const query = "?" + (0, util_1.parseOptions)(options);
             const endpoint = `/channels/commercial${query}`;
             return this._post(endpoint);
         });
